@@ -21,9 +21,9 @@ Sentinel is a cloud-native intelligence tool that distills long-form YouTube vid
 
 | Dashboard | AI Summary View |
 | :---: | :---: |
-| ![Dashboard](./assets/sentinel-ai-0.png)
-|![Dashboard](./assets/sentinel-ai-6.png)
+|![Dashboard](./assets/sentinel-ai-0.png) |![AI Summary View](./assets/sentinel-ai-2.png)
+|![Dashboard](./assets/sentinel-ai-6.png) |![AI Summary View](./assets/sentinel-ai-1.png)
 |![Dashboard](./assets/sentinel-ai-5.png)
 |![Dashboard](./assets/sentinel-ai-3.png)
-|![AI Summary View](./assets/sentinel-ai-2.png)
-|![AI Summary View](./assets/sentinel-ai-1.png)
+
+
