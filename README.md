@@ -14,3 +14,16 @@ Sentinel is a cloud-native intelligence tool that distills long-form YouTube vid
 - **Backend:** Spring Boot, Spring Data JPA
 - **Storage:** PostgreSQL, Redis
 - **AI:** Google Gemini Pro API
+
+
+
+### 📸 Previews
+
+| Dashboard | AI Summary View |
+| :---: | :---: |
+| ![Dashboard](./assets/sentinel-ai-0.png)
+|![Dashboard](./assets/sentinel-ai-6.png)
+|![Dashboard](./assets/sentinel-ai-5.png)
+|![Dashboard](./assets/sentinel-ai-3.png)
+|![AI Summary View](./assets/sentinel-ai-2.png)
+|![AI Summary View](./assets/sentinel-ai-1.png)
