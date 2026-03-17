@@ -1,0 +1,19 @@
+services:
+  # Message Broker & Cache
+  sentinel-redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+
+  # Primary Database
+  sentinel-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: sentinel_db
+    ports:
+      - "5432:5432"
+
+  # We will add the Ingestor and Worker here once the code is ready

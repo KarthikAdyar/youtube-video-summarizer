@@ -1,0 +1,20 @@
+spring:
+  ai:
+    google:
+      genai:
+        api-key: ${GEMINI_API_KEY}
+        chat:
+          options:
+            model: gemini-2.5-flash-lite
+            temperature: 0.7
+  datasource:
+    url: jdbc:postgresql://localhost:5432/sentinel_db
+    username: USERNAME
+    password: PASSWORD
+  jpa:
+     hibernate:
+      ddl-auto: validate
+     show-sql: true
+     properties:
+        hibernate:
+          database-platform: org.hibernate.dialect.PostgreSQLDialect
