@@ -28,4 +28,7 @@ public class VideoSummary {
     
     @Column(name = "owner_id")
     private String ownerId;
+
+    @Column(name = "transcript", columnDefinition = "TEXT")
+    private String transcript;
 }

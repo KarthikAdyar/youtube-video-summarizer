@@ -26,6 +26,7 @@ public class SummarizerService {
         videoSummary.setSummaryText(summary);
         videoSummary.setJobId(jobId);
         videoSummary.setOwnerId(ownerId);
+        videoSummary.setTranscript(transcript);
 
         repository.save(videoSummary);
         System.out.println("✅ Summary saved to DB for video: " + title);

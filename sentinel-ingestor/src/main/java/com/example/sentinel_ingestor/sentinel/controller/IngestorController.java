@@ -2,6 +2,7 @@ package com.example.sentinel_ingestor.sentinel.controller;
 
 import com.example.sentinel_ingestor.sentinel.dto.VideoRequest;
 import com.example.sentinel_ingestor.sentinel.entity.VideoSummary;
+import com.example.sentinel_ingestor.sentinel.rag.RagService;
 import com.example.sentinel_ingestor.sentinel.repository.VideoSummaryRepository;
 import com.example.sentinel_ingestor.service.QueueService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class IngestorController {
 
     private final QueueService queueService;
     private final VideoSummaryRepository repository;
+    private final RagService ragService;
 
     private String extractVideoId(String videoUrl) {
         if (videoUrl != null && videoUrl.contains("v=")) {
@@ -102,5 +104,22 @@ public class IngestorController {
 
         );
 
+    }
+
+    @PostMapping("/videos/{videoId}/ask")
+    public ResponseEntity<Map<String, String>> askQuestion(
+            @PathVariable String videoId,
+            @RequestBody Map<String, String> body,
+            org.springframework.security.core.Authentication authentication) {
+        
+        String question = body.get("question");
+        if (question == null || question.isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Question is required"));
+        }
+
+        String ownerId = authentication != null ? authentication.getName() : null;
+        String answer = ragService.askQuestion(videoId, question, ownerId);
+
+        return ResponseEntity.ok(Map.of("answer", answer));
     }
 }

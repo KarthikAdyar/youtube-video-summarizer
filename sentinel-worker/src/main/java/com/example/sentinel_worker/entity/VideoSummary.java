@@ -40,4 +40,9 @@ public class VideoSummary {
     @Setter
     private String ownerId;
 
+    @Getter
+    @Setter
+    @Column(columnDefinition = "TEXT")
+    private String transcript;
+
 }

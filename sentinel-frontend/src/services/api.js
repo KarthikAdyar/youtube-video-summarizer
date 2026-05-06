@@ -34,3 +34,8 @@ export const fetchHistory = async () => {
     const response = await client.get(`${API_BASE}/history`);
     return response.data;
 }
+
+export const askQuestion = async (videoId, question) => {
+    const response = await client.post(`${API_BASE}/videos/${videoId}/ask`, { question });
+    return response.data;
+}
