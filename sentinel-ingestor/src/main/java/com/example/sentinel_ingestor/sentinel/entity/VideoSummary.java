@@ -25,4 +25,7 @@ public class VideoSummary {
     private String summaryText;
 
     private LocalDateTime createdAt;
+    
+    @Column(name = "owner_id")
+    private String ownerId;
 }

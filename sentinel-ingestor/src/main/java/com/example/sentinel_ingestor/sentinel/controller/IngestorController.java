@@ -34,14 +34,16 @@ public class IngestorController {
     }
 
     @PostMapping("/summarize")
-    public ResponseEntity<?> summarize(@RequestBody VideoRequest request) {
+    public ResponseEntity<?> summarize(@RequestBody VideoRequest request, org.springframework.security.core.Authentication authentication) {
         String videoId = extractVideoId(request.getUrl());
         if (videoId == null) {
             return ResponseEntity.badRequest().body("Invalid YouTube URL");
         }
 
-        // Check if we already have this video summarized
-        Optional<VideoSummary> existing = repository.findByVideoId(videoId);
+        String ownerId = authentication != null ? authentication.getName() : null;
+
+        // Check if we already have this video summarized for this user
+        Optional<VideoSummary> existing = repository.findByVideoIdAndOwnerId(videoId, ownerId);
 
         if (existing.isPresent()) {
             // Return existing summary instantly
@@ -52,39 +54,46 @@ public class IngestorController {
         String jobId = java.util.UUID.randomUUID().toString();
 
         // Call your service with both required arguments
-        queueService.pushToQueue(jobId, request.getUrl());
+        queueService.pushToQueue(jobId, request.getUrl(), ownerId);
 
         // Return the jobId to the frontend so React can show a "Loading..." state for that specific job
         return ResponseEntity.ok(jobId);
     }
 
     @GetMapping("/status/{jobId}")
-    public ResponseEntity<?> getStatus(@PathVariable String jobId) {
+    public ResponseEntity<?> getStatus(@PathVariable String jobId, org.springframework.security.core.Authentication authentication) {
         // Look up the summary in your DB using the Job ID
         // If found, return the summary object (title, text, etc.)
         // If not found, return a 404 (telling React to keep waiting)
         System.out.println("Is it here " + jobId);
+        String ownerId = authentication != null ? authentication.getName() : null;
         return repository.findByJobId(jobId)
+                .map(v -> {
+                    if (ownerId != null && !ownerId.equals(v.getOwnerId())) return null;
+                    return v;
+                })
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/history")
-    public ResponseEntity<List<VideoSummary>> getHistory() {
-        List<VideoSummary> data = repository.findAll();
+    public ResponseEntity<List<VideoSummary>> getHistory(org.springframework.security.core.Authentication authentication) {
+        String ownerId = authentication != null ? authentication.getName() : null;
+        java.util.List<VideoSummary> data = ownerId != null ? repository.findAllByOwnerId(ownerId) : java.util.List.of();
 
         return ResponseEntity
-                .status(HttpStatus.OK) // Sets status to 200
-                .header("X-Sentinel-Version", "1.0") // You can add custom headers
-                .body(data); // The actual JSON
+                .status(HttpStatus.OK)
+                .header("X-Sentinel-Version", "1.0")
+                .body(data);
     }
 
     @PostMapping
-    public Map<String, String> processVideo(@RequestBody VideoRequest request){
+    public Map<String, String> processVideo(@RequestBody VideoRequest request, org.springframework.security.core.Authentication authentication){
         String jobId = UUID.randomUUID().toString();
 
         System.out.println("Received URL " + request);
-        queueService.pushToQueue(jobId , request.getUrl());
+        String ownerId = authentication != null ? authentication.getName() : null;
+        queueService.pushToQueue(jobId , request.getUrl(), ownerId);
 
         return Map.of(
                 "jobId", jobId,

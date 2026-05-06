@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { fetchSummaryStatus, startSummaryJob } from "./services/api";
+import { fetchSummaryStatus, startSummaryJob, fetchHistory as apiFetchHistory } from "./services/api";
 import Home from "./components/Home/Home";
 import SummaryView from "./components/Summary/Summary";
 import "./App.css";
+import AuthRedirect from './components/AuthRedirect/AuthRedirect';
+import Login from './components/Auth/Login';
+import { getUserFromToken } from './services/auth';
 
 function App() {
   const [url, setUrl] = useState("");
@@ -13,8 +16,7 @@ function App() {
 
   const fetchHistory = async () => {
     try {
-      const response = await fetch("http://localhost:8081/api/v1/history");
-      const data = await response.json();
+      const data = await apiFetchHistory();
       setHistory(data);
     } catch (err) {
       console.error("Failed to fetch history", err);
@@ -22,7 +24,9 @@ function App() {
   };
 
   useEffect(() => {
-    fetchHistory();
+    // if user logged in, fetch history
+    const u = getUserFromToken();
+    if(u) fetchHistory();
   }, []);
 
   const handleProcess = async () => {
@@ -82,6 +86,9 @@ function App() {
               />
             }
           />
+          <Route path="/oauth2/redirect" element={<AuthRedirect/>} />
+          <Route path="/login" element={<Login />} />
+          
           <Route
             path="/summary/:jobId"
             element={<SummaryView history={history} />}

@@ -6,15 +6,20 @@
 }
 
 .header {
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 4rem;
+}
+
+.header-left {
+  text-align: left;
 }
 
 .header h1 {
   font-size: 3rem;
   font-weight: 900;
   letter-spacing: 0.1em;
-
 }
 
 .subtitle {

@@ -15,7 +15,7 @@ public class SummarizerService {
         this.chatClient = builder.build();
     }
 
-    public void processSummary(String jobId , String videoId , String title , String transcript){
+    public void processSummary(String jobId , String videoId , String title , String transcript, String ownerId){
         String summary = chatClient.prompt()
                 .user("Summarise this video transcript " + transcript)
                 .call().content();
@@ -25,6 +25,7 @@ public class SummarizerService {
         videoSummary.setTitle(title);
         videoSummary.setSummaryText(summary);
         videoSummary.setJobId(jobId);
+        videoSummary.setOwnerId(ownerId);
 
         repository.save(videoSummary);
         System.out.println("✅ Summary saved to DB for video: " + title);

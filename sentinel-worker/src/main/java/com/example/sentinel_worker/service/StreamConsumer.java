@@ -33,6 +33,7 @@ public class StreamConsumer implements StreamListener<String, MapRecord<String, 
         Map<String, String> body = message.getValue();
         String jobId = body.get("jobId");
         String videoUrl = body.get("videoUrl");
+        String ownerId = body.getOrDefault("ownerId", "");
 
         log.info(">>> [MATCHED] Processing Job: {} for URL: {}", jobId, videoUrl);
 
@@ -40,7 +41,7 @@ public class StreamConsumer implements StreamListener<String, MapRecord<String, 
         String videoId = extractVideoId(videoUrl);
         String title = "YouTube Video " + videoId;
         String transcript = youtubeService.fetchTranscript(videoUrl);
-        summarizerService.processSummary(jobId , videoId , title , transcript);
+        summarizerService.processSummary(jobId , videoId , title , transcript, ownerId);
 
     }
 }

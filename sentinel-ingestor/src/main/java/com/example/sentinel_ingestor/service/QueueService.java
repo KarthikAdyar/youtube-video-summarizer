@@ -14,10 +14,11 @@ public class QueueService {
     private final StringRedisTemplate redisTemplate;
     private static final String STREAM_KEY = "video-jobs";
 
-    public void pushToQueue(String jobId, String url){
+    public void pushToQueue(String jobId, String url, String ownerId){
         Map<String, String> payload = Map.of(
-                "jobId",jobId,
-                "videoUrl", url
+                "jobId", jobId,
+                "videoUrl", url,
+                "ownerId", ownerId == null ? "" : ownerId
         );
 
         MapRecord<String, String, String> record = StreamRecords.newRecord()

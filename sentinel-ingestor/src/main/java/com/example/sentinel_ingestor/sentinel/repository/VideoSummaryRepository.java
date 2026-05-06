@@ -14,4 +14,9 @@ public interface VideoSummaryRepository extends JpaRepository<VideoSummary, Long
 
     // For checking if we already summarized this video (The Cache Check)
     Optional<VideoSummary> findByVideoId(String videoId);
+
+    // Per-user queries
+    Optional<VideoSummary> findByVideoIdAndOwnerId(String videoId, String ownerId);
+
+    java.util.List<VideoSummary> findAllByOwnerId(String ownerId);
 }

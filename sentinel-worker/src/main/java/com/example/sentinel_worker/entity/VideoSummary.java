@@ -35,5 +35,9 @@ public class VideoSummary {
     private String jobId;
 
     private LocalDateTime createdAt = LocalDateTime.now();
+    
+    @Getter
+    @Setter
+    private String ownerId;
 
 }
