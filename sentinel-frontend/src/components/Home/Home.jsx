@@ -16,14 +16,13 @@ const Home = ({ url, setUrl, status, history, handleProcess, currSummaryText }) 
         </div>
         <div>
           {user ? (
-            <>
-              <span style={{marginRight:8}}>Hi {user.name || user.email || user.sub}</span>
-              <button className="btn-secondary" onClick={() => auth.logout()}>Logout</button>
-            </>
+            <div className="user-info">
+              <div className="user-avatar">{((user.name || user.email || user.sub).charAt(0)).toUpperCase()}</div>
+              <span className="user-greeting">Hi {user.name || user.email || user.sub}</span>
+              <button className="btn-logout" onClick={() => auth.logout()}>Logout</button>
+            </div>
           ) : (
-            <>
-              <button className="btn-secondary" onClick={() => navigate('/login')}>Login</button>
-            </>
+            <button className="btn-login" onClick={() => navigate('/login')}>Sign In</button>
           )}
         </div>
       </header>
@@ -45,7 +44,9 @@ const Home = ({ url, setUrl, status, history, handleProcess, currSummaryText }) 
       </div>
 
       {!user && (
-        <p style={{color:'#666'}}>You must login with Google to summarize videos.</p>
+        <p className="login-prompt">
+          Sign in with <span onClick={() => navigate('/login')}>Google</span> to summarize videos
+        </p>
       )}
 
       {status === 'processing' && (
